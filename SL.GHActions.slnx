@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SL.GHActions.Tests/SL.GHActions.Tests.csproj" />
+  <Project Path="SL.GHActions.Web/SL.GHActions.Web.csproj" />
+</Solution>
