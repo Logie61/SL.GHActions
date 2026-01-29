@@ -48,12 +48,31 @@ jobs:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-  deploy:
+  deploy-wip:
     name: Deploy to WIP
     runs-on: ubuntu-latest 
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
     needs: [build-and-test]
 
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapp
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      
+      - name: Deploy
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+
+  deploy-test:
+    name: Deploy to TEST
+    runs-on: ubuntu-latest 
+    if: ${{ success() && contains(github.ref, 'refs/heads/release') }}
+    needs: [build-and-test]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
