@@ -49,8 +49,9 @@ jobs:
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
   deploy:
-    name: Deploy to Azure
-    runs-on: ubuntu-latest
+    name: Deploy to WIP
+    runs-on: ubuntu-latest 
+    if: ${{ github.ref == 'refs/head/main' }}
     needs: [build-and-test]
 
     steps:
