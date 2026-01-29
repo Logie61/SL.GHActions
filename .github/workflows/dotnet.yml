@@ -16,6 +16,7 @@ env:
   SOLUTION_PATH: 'SL.GHActions.slnx'
   PUBLISH_DIR: './publish'
   PROJECT_PATH: 'SL.GHActions.Web'
+  NODE_VERSION: 20
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -23,6 +24,11 @@ jobs:
     steps:
       # Check out the repo
       - uses: actions/checkout@v4
+
+      # Setup node
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
       
       # Setup .NET Core SDK
       - name: Setup .NET Core
