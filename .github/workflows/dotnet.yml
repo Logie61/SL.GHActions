@@ -9,27 +9,41 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  AZURE_WEBAPP_NAME: sl-gh-actions-web    # Set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: './SL.GHActions.Web/publish'      # Set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '10.0.x'           # Set this to the dot net version to use
+  SOLUTION_PATH: 'SL.GHActions.slnx'
+  PUBLISH_DIR: './publish'
+  PROJECT_PATH: 'SL.GHActions.Web'
 jobs:
   build-and-test:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 10.0.x
-    - name: Setup Node
-      uses: actions/setup-node@v6
-      with:
-        node-version: 20
-    # Can replace dotnet cli tooling calls with use of specific build tooling    
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    
-      #- run build script if applicable
+      # Check out the repo
+      - uses: actions/checkout@v4
+      
+      # Setup .NET Core SDK
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }} 
+          
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --verbosity normal
+
+      - name: Publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --no-restore --no-build --property:PublishDir=${{ env.PUBLISH_DIR }}
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: webapp
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
