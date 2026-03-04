@@ -74,7 +74,6 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
-
   deploy-test:
     environment: TEST
     name: Deploy to TEST
@@ -94,24 +93,6 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
-  # manual-approval:
-  #   name: Manual Approval
-  #   runs-on: ubuntu-latest
-  #   needs: deploy-test
-  #   if: success() # Only proceed if terraform-plan job succeeds
-    
-  #   permissions:
-  #     issues: write
-
-  #   steps:
-  #     - name: Await Manual Approval
-  #       uses: trstringer/manual-approval@v1
-  #       with:
-  #         secret: ${{ github.TOKEN }}
-  #         approvers: Logie61 # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
-  #         minimum-approvals: 1
-  #         issue-title: "Manual Approval Required for deployment to prod"
-  #         issue-body: "Please approve or deny the deployment."
   deploy-prod:
     environment: PROD
     name: Deploy to PROD
