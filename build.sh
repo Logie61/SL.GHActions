@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -euo pipefail
-dotnet run --project ./DdcApply.Tools.Build.csproj -- "$@"
+dotnet run --project ./DdcApply.Tools.Build/DdcApply.Tools.Build.csproj -- "$@"
