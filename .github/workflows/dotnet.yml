@@ -43,7 +43,7 @@ jobs:
       
       - name: Build and Publish
         if: ${{ success() }}
-        run: build.sh publish-and-zip
+        run: ./build.sh publish-and-zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v4
