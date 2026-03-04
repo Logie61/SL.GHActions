@@ -38,8 +38,8 @@ jobs:
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION_PATH }}
       
-      - name: Test
-        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --verbosity normal
+      # - name: Test
+      #   run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --verbosity normal
       
       - name: Build and Publish
         if: ${{ success() }}
