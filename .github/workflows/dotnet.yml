@@ -55,6 +55,7 @@ jobs:
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
   deploy-wip:
+    environment: WIP
     name: Deploy to WIP
     runs-on: ubuntu-latest 
     if: ${{ success() && github.ref == 'refs/heads/main' }}
@@ -75,6 +76,7 @@ jobs:
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
   deploy-test:
+    environment: TEST
     name: Deploy to TEST
     runs-on: ubuntu-latest 
     if: ${{ success() && contains(github.ref, 'refs/heads/release') }}
@@ -92,25 +94,26 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
-  manual-approval:
-    name: Manual Approval
-    runs-on: ubuntu-latest
-    needs: deploy-test
-    if: success() # Only proceed if terraform-plan job succeeds
+  # manual-approval:
+  #   name: Manual Approval
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-test
+  #   if: success() # Only proceed if terraform-plan job succeeds
     
-    permissions:
-      issues: write
+  #   permissions:
+  #     issues: write
 
-    steps:
-      - name: Await Manual Approval
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: Logie61 # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
-          minimum-approvals: 1
-          issue-title: "Manual Approval Required for deployment to prod"
-          issue-body: "Please approve or deny the deployment."
+  #   steps:
+  #     - name: Await Manual Approval
+  #       uses: trstringer/manual-approval@v1
+  #       with:
+  #         secret: ${{ github.TOKEN }}
+  #         approvers: Logie61 # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
+  #         minimum-approvals: 1
+  #         issue-title: "Manual Approval Required for deployment to prod"
+  #         issue-body: "Please approve or deny the deployment."
   deploy-prod:
+    environment: PROD
     name: Deploy to PROD
     runs-on: ubuntu-latest 
     if: ${{ success() && contains(github.ref, 'refs/heads/release') }}
