@@ -11,7 +11,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: sl-gh-actions-web    # Set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: './SL.GHActions.Web/artifacts'      # Set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_PACKAGE_PATH: './artifacts'      # Set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '10.0.x'           # Set this to the dot net version to use
   SOLUTION_PATH: 'SL.GHActions.slnx'
   PROJECT_PATH: 'SL.GHActions.Web'
