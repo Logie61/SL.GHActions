@@ -22,11 +22,15 @@ Target("clean", async () =>
 
 Target("build", dependsOn: ["clean"], () => Run("dotnet", $"build ./SL.GHActions.Web/SL.GHActions.Web.csproj -c Release"));
 
-Target("publish", dependsOn: ["build"], forEach: toPublish, action: project =>
+Target("publish", dependsOn: ["build", "test"], forEach: toPublish, action: project =>
 {
     Console.WriteLine($"Publishing {project}");
     Run("dotnet", $"publish {project.Path} --configuration Release --no-build --nologo --output \"{Path.GetFullPath($"artifacts/{project.OutputDirectoryName()}")}\"");
 });
+
+Target("test", () => Run("dotnet", "test"));
+
+Target("pr", dependsOn: ["test"]);
 
 Target("publish-and-zip",
     dependsOn: ["publish"],

@@ -38,12 +38,13 @@ jobs:
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION_PATH }}
       
-      # - name: Test
-      #   run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --verbosity normal
-      
       - name: Build and Publish
-        if: ${{ success() }}
+        if: ${{ success() && github.event_name != 'pull_request' }}
         run: ./build.sh publish-and-zip
+
+      - name: Pull Request
+        if: ${{ success() && github.event_name == 'pull_request' }}
+        run: ./build.sh pr
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v4
